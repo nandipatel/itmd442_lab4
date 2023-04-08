@@ -6,5 +6,20 @@
  
  <body>
     <h1>Add Contact</h1>
+
+    <div id="links">
+        <a href="/">Home</a>
+        <a href="/add">Add Contact</a>
+        <a href="/delete">Delete Contact</a>
+    </div>
+
+    <form method="post" action="/addname">
+        <label>Enter Your Contact Information:</label><br>
+        <input type="text" name="firstName" placeholder="Enter first name..." required>
+        <input type="text" name="lastName" placeholder="Enter last name..." required>
+        <input type="email" name="email" placeholder="Enter your email address...">
+        <input type="text" name="notes" placeholder="Enter any notes...">
+        <input type="submit" value="Add User">
+    </form>
  </body>
 </html>
