@@ -35,6 +35,9 @@ app.get("/", (req, res) => {
 app.get("/add", (req, res) => {
     res.sendFile(__dirname + "/add.html");
 });
+app.get("/update", (req, res) => {
+    res.sendFile(__dirname + "/update.html");
+});
 app.get("/delete", (req, res) => {
     res.sendFile(__dirname + "/delete.html");
 });
