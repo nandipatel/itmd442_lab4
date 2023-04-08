@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//mongo connection
 var mongoose = require("mongoose");
 const conn_str = 'mongodb+srv://npatel127:npatel127@cluster0.hzj7ktr.mongodb.net/contactdb?retryWrites=true&w=majority'
 
@@ -23,7 +24,7 @@ connectDB();
 var userSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
-    email_add: String,
+    email: String,
     notes: String,
     }, {timestamps: true});
 
@@ -42,27 +43,44 @@ app.get("/delete", (req, res) => {
     res.sendFile(__dirname + "/delete.html");
 });
 
+//search user
+app.get("/searchname", async (req, res) => {
+    let firstName = [req.query.firstName || []].flat();
+    let lastName = [req.query.lastName || []].flat();
+    let query = {
+        firstName: {
+            "$in": firstName
+        },
+        lastName: {
+            "$in": lastName
+        }
+    };
+    User.find(query, function (err, foundEnvironment) {
+        if (err) {
+            console.log(err);
+        } else {
+            //render show template with that env
+            res.render("show", { environment: foundEnvironment });
+        }
+    });
+});
+
 //add user
 app.post("/addname", (req, res) => {
     var myData = new User(req.body);
     myData.save()
         .then(item => {
             res.send("Name saved to database");
+            res.redirect("/");
         })
         .catch(err => {
             res.status(400).send("Unable to save to database");
         });
 });
 
-//search user
-app.post("/searchname", async (req, res) => {
-    let collection = await db.collection("users");
-    let query = {_id: ObjectId(req.params.id)};
-    let result = await collection.find(query);
+//update user
 
-    if (!result) res.send("Not found").status(404);
-    else res.send(result).status(200);
-});
+//delete user
 
 app.listen(port, () => {
     console.log("Server listening on port " + port);
